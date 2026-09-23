@@ -448,6 +448,8 @@ True
 
 <details>
 <summary>Explain what are ACLs. For what use cases would you recommend to use them?</summary><br><b>
+ACL stands for Access Control Lists. We can use ACL to have more granular control over accesses to certain files for certain users specifically. For instance, we can return the ACL of a particular file with the command <code>getfacl /absolute/file/path</code> and modify ACLs for a specific file with <code>setfacl -m</code>.
+  
 </b></details>
 
 <details>
@@ -524,6 +526,7 @@ To stop a service: `systemctl stop <service name>`
 
 <details>
 <summary>Describe how to make a certain process/app a service</summary><br><b>
+  The process will need a <code>.service</code> file to be created at the location <code>/etc/systemd/system/service-name.service</code> to be made into a service. The file has certain characteristics and need certain inputs to work. More details <a href="https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6">here</a>.
 </b></details>
 
 ### Troubleshooting and Debugging
@@ -627,6 +630,8 @@ The kernel is part of the operating system and is responsible for tasks like:
 
 <details>
 <summary>What is a Linux kernel module and how do you load a new module?</summary><br><b>
+
+A Linux kernel module is a piece of code that can be dynamically loaded into the kernel to extend its functionality. These modules are typically used to add support for hardware devices, filesystems, or system calls. The kernel itself is monolithic, but with modules, its capabilities can be extended without having to reboot the system or recompile the entire kernel.
 </b></details>
 
 <details>
@@ -2143,6 +2148,20 @@ This is a good article about the topic: https://ops.tips/blog/how-linux-creates-
 
 <details>
 <summary>You executed a script and while still running, it got accidentally removed. Is it possible to restore the script while it's still running?</summary><br><b>
+It is possible to restore a script while it's still running if it has been accidentally removed. The running script process still has the code in memory. You can use the /proc filesystem to retrieve the content of the running script.
+1.Find the Process ID by running 
+```
+ps aux | grep yourscriptname.sh
+```
+Replace yourscriptname.sh with your script name.
+2.Once you have the PID, you can access the script's memory through the /proc filesystem. The script will be available at /proc/<PID>/fd/, where <PID> is the process ID of the running script. Typically, the script's file descriptor is 0 or 1.
+
+You can copy the script content to a new file using the cp command:
+```
+cp /proc/<PID>/fd/0 /path_to_restore_your_file/yourscriptname.sh
+```
+Replace <PID> with the actual PID of the  script and /path_to_restore_your_file/yourscriptname.sh with the path where you want to restore the script.
+
 </b></details>
 
 <a name="questions-linux-memory"></a>
@@ -2233,6 +2252,14 @@ $OLDPWD
 
 <details>
 <summary>How to count the number of lines in a file? What about words?</summary><br><b>
+
+For these we can use `wc` command.
+
+1. To count the number of lines in file
+```wc -l```
+
+2. To count the number of words in file
+```wc -w```
 </b></details>
 
 <details>
